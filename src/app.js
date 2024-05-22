@@ -10,11 +10,15 @@ const PORT = process.env.SERVER_PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 await connectDatabase();
+
 app.use((req, res, next) => {
   res.status(STATUS_CODES.NOT_FOUND).send("해당페이지를 찾을 수 없습니다.");
 });
+
 app.use(errorHandler);
+
 app.listen(PORT, () => {
   console.log("Listening on port " + PORT);
 });
