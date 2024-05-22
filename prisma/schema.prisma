@@ -15,7 +15,7 @@ datasource db {
 
 enum Role {
   RECRUITER
-  USER
+  APPLICANT
 }
 
 enum Status {
@@ -49,7 +49,7 @@ model user_info {
   name String @map("name")
   age Int @map("age")
   gender String @map("String")
-  role Role @map("role") @default(USER)
+  role Role @map("role") @default(APPLICANT)
   
   created_at DateTime @map("created_at") @default(now())
   updated_at DateTime @updatedAt @map("updated_at")
