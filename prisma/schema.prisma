@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  RECRUITER
+  USER
+}
+
+enum Status {
+  APPLY
+  DROP
+  PASS
+  INTERVIEW1
+  INTERVIEW2
+  FINAL_PASS
+}
+
+model user {
+  user_id String @id @default(uuid()) @map("user_id")
+  email String @unique @map("email")
+  password String @map("password")
+
+  created_at DateTime @map("created_at") @default(now())
+  updated_at DateTime @updatedAt @map("updated_at")
+
+  user_info user_info?
+  resume resume[]
+  resume_status_change_log  resume_status_change_log[]
+  @@map("user")
+
+  @@index([email], name:"idx_user_email")
+}
+
+model user_info {
+  user_info_id String @id @default(uuid()) @map("user_info_id")
+  user_id String @unique @map("user_id")
+  name String @map("name")
+  age Int @map("age")
+  gender String @map("String")
+  role Role @map("role") @default(USER)
+  
+  created_at DateTime @map("created_at") @default(now())
+  updated_at DateTime @updatedAt @map("updated_at")
+
+
+  user user @relation(fields: [user_id], references: [user_id],onDelete: Cascade)
+  @@map("user_info")
+
+  @@index([user_id],name:"idx_user_info_user_id")
+}
+
+model resume{
+  resume_id String @id @default(uuid()) @map("resume_id")
+  user_id String @map("user_id")
+  title String @map("String")
+  content String @db.Text @map("content")
+  status Status @map("status") @default(APPLY)
+  created_at DateTime @map("created_at") @default(now())
+  updated_at DateTime @updatedAt @map("updated_at")
+
+  user user @relation(fields: [user_id],references: [user_id],onDelete: Cascade)
+  resume_status_change_log resume_status_change_log[]
+
+  @@map("resume")
+  @@index([user_id],name:"idx_resume_user_id")
+  @@index([status],name:"idx_status")
+}
+
+
+model resume_status_change_log{
+  log_id String @id @default(uuid()) @map("log_id")
+  changed_by String @map("changed_by")
+  resume_id String @map("resume_id")
+  reason String @db.Text @map("reason")
+  previous_status Status @map("previous_status")
+  new_status Status @map("new_status")
+  created_at DateTime @default(now()) @map("created_at")
+
+  user user @relation(fields: [changed_by],references: [user_id],onDelete: Cascade)
+  resume resume @relation(fields: [resume_id],references: [resume_id],onDelete: Cascade)
+  @@map("resume_status_change_log")
+
+  @@index([resume_id],name:"idx_log_resume_id")
+  @@index([changed_by],name:"idx_log_changed_by")
+  @@index([created_at],name:"idx_log_created_at")
+}
+
