@@ -2,12 +2,12 @@
 
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient({
+export const prisma = new PrismaClient({
   log: ["query", "info", "warn", "error"],
   errorFormat: "pretty"
 });
 
-async function connectDatabase() {
+export async function connectDatabase() {
   try {
     await prisma.$connect();
     console.log("성공적으로 연결 MySQL DB로 연결~");
@@ -17,5 +17,3 @@ async function connectDatabase() {
     await prisma.$disconnect();
   }
 }
-
-export default connectDatabase;
