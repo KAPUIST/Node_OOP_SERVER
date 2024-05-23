@@ -10,7 +10,7 @@ export const prisma = new PrismaClient({
 export async function connectDatabase() {
   try {
     await prisma.$connect();
-    console.log("성공적으로 연결 MySQL DB로 연결~");
+    console.info("성공적으로 연결 MySQL DB로 연결~");
   } catch (error) {
     console.error("데이터 베이스 연결에 실패 ㅜ.ㅜ", error);
   } finally {

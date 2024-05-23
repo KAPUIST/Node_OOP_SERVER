@@ -1,6 +1,6 @@
 // 에러 핸들링 미들웨어
 import statusCode from "../utils/statusCode.js";
-
+import ErrorHandler from "../utils/errorHandler/errorHandler.js";
 export function CustomErrorHandler(error, req, res, next) {
   console.error(error);
   error.statusCode = error.statusCode || 500;
@@ -8,7 +8,7 @@ export function CustomErrorHandler(error, req, res, next) {
 
   //토큰 에러
   if (error.name === "JsonWebTokenError") {
-    const message = "유효하지않은 인증 정보입니다.";
+    const message = "인증 정보가 유효하지 않습니다.";
     error = new ErrorHandler(401, message);
   }
 

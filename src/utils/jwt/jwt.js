@@ -6,7 +6,6 @@ const options = {
   refreshOption: { expiresIn: "7d" }
 };
 export const generateAccessToken = (user) => {
-  console.log(options);
   return jwt.sign({ user_id: user.user_id }, options.accessSecretKey, options.accessOption);
 };
 

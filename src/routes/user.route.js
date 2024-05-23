@@ -1,9 +1,9 @@
 import express from "express";
-import { loginUser, registerUser } from "../controllers/auth.controller.js";
-import { authorizationUser } from "../middlewares/auth.meddleware.js";
+import { getUser } from "../controllers/user.controller.js";
+import { authorizeUser } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 //유저 회원가입
-router.get("/user", authorizationUser, registerUser);
+router.get("/user", authorizeUser, getUser);
 
 export default router;

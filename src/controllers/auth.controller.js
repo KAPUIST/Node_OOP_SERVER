@@ -27,6 +27,7 @@ export const loginUser = AsyncErrorHandler(async (req, res, next) => {
 
   res.cookie("authorization", `Bearer ${accessToken}`);
   res.status(STATUS_CODES.OK).json({
-    status: STATUS_CODES.OK
+    status: STATUS_CODES.OK,
+    accessToken: accessToken
   });
 });

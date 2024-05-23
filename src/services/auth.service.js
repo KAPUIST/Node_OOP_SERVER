@@ -42,7 +42,7 @@ export const createUser = async (user) => {
 //유저 로그인 인증 함수
 export const authenticateUser = async (user) => {
   const isExitsUser = await checkUserExists(user.email);
-  console.log(isExitsUser.password, user.password);
+
   if (!isExitsUser || !(await bcrypt.compare(user.password, isExitsUser.password))) {
     throw new ErrorHandler(401, "인증 정보가 유효하지 않습니다.");
   }
