@@ -46,7 +46,7 @@ model user {
 model user_info {
   user_info_id String @id @default(uuid()) @map("user_info_id")
   user_id String @unique @map("user_id")
-  name String @map("name")
+  username String @map("username")
   age Int @map("age")
   gender String @map("String")
   role Role @map("role") @default(APPLICANT)
