@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
 import ErrorHandler from "../utils/errorHandler/errorHandler.js";
 import { verifyAccessToken } from "../utils/jwt/jwt.js";
 import { prisma } from "../utils/prisma/prisma.util.js";
+import STATUS_CODES from "../utils/statusCode.js";
 
 export const authorizeUser = async (req, res, next) => {
   try {
@@ -52,4 +52,13 @@ const getUserFromToken = async (token) => {
   };
 
   return formattedData;
+};
+
+export const requireRoles = (roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      throw new ErrorHandler(STATUS_CODES.FORBIDDEN, "접근권한이 존재하지않습니다.");
+    }
+    next();
+  };
 };

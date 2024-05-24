@@ -43,10 +43,7 @@ export const createUser = async (user) => {
 export const authenticateUser = async (user) => {
   const isExitsUser = await checkUserExists(user.email);
 
-  if (
-    !isExitsUser ||
-    !(await bcrypt.compare(user.password, isExitsUser.password))
-  ) {
+  if (!isExitsUser || !(await bcrypt.compare(user.password, isExitsUser.password))) {
     throw new ErrorHandler(401, "인증 정보가 유효하지 않습니다.");
   }
   console.log(isExitsUser);
