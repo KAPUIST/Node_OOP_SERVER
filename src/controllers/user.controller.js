@@ -1,10 +1,10 @@
-import { AsyncErrorHandler } from "../middlewares/asyncError.middleware.js";
+import { asyncErrorHandler } from "../middlewares/asyncError.middleware.js";
 import STATUS_CODES from "../utils/statusCode.js";
 
 import { getUserById } from "../services/user.service.js";
 
 //유저 생성 컨트롤러
-export const getUser = AsyncErrorHandler(async (req, res, next) => {
+export const getUser = asyncErrorHandler(async (req, res, next) => {
   try {
     const user = await getUserById(req.user.user_id);
 

@@ -5,8 +5,12 @@ const options = {
   refreshSecretKey: process.env.REFRESH_TOKEN_SECRET_KEY,
   refreshOption: { expiresIn: "7d" }
 };
-export const generateAccessToken = (user) => {
-  return jwt.sign({ user_id: user.user_id }, options.accessSecretKey, options.accessOption);
+export const generateAccessToken = (userId) => {
+  return jwt.sign(
+    { user_id: userId },
+    options.accessSecretKey,
+    options.accessOption
+  );
 };
 
 export const verifyAccessToken = (token) => {
