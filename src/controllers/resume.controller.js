@@ -7,9 +7,11 @@ import {
 import {
   createUserResume,
   getResumesByUserId,
-  getResumeByUserId,
   updateResumeByResumeId,
-  deleteResumeByResumeId
+  deleteResumeByResumeId,
+  getAllResumesForRECRUITER,
+  getResumeForRECRUITERByResumeId,
+  getResumeForAPPLICANTByResumeId
 } from "../services/resume.service.js";
 import ErrorHandler from "../utils/errorHandler/errorHandler.js";
 
@@ -30,38 +32,88 @@ export const createResume = asyncErrorHandler(async (req, res, next) => {
     next(error);
   }
 });
-//유저 아이디로 모든 Resume 가져와 버리기
-export const getResumes = asyncErrorHandler(async (req, res, next) => {
-  try {
-    const userId = req.user.user_id;
-    //쿼리값이 존재 하지 않을때 기본값 desc 로 설정
+//유저 아이디로 모든 Resume 가져와 버리기 APPLICANT role 을 가지고있는 유저만
+export const getResumesForAPPLICANT = asyncErrorHandler(
+  async (req, res, next) => {
+    try {
+      const userId = req.user.user_id;
+      //쿼리값이 존재 하지 않을때 기본값 desc 로 설정
 
-    const { sort = "desc" } = req.query;
-    const orderBy = sort.toLowerCase() === "asc" ? "asc" : "desc";
+      const { sort = "desc" } = req.query;
 
-    const resumes = await getResumesByUserId(userId, orderBy);
-    res.status(STATUS_CODES.OK).json({
-      statusCode: STATUS_CODES.OK,
-      data: resumes
-    });
-  } catch (error) {
-    next(error);
+      const orderBy = sort.toLowerCase() === "asc" ? "asc" : "desc";
+
+      const resumes = await getResumesByUserId(userId, orderBy);
+      res.status(STATUS_CODES.OK).json({
+        statusCode: STATUS_CODES.OK,
+        data: resumes
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
+//모든 Resume 가져와 버리기 RECRUITER role 을 가지고있는 유저만
+export const getResumesForRECRUITER = asyncErrorHandler(
+  async (req, res, next) => {
+    try {
+      const Status = {
+        APPLY: "APPLY",
+        DROP: "DROP",
+        PASS: "PASS",
+        INTERVIEW1: "INTERVIEW1",
+        INTERVIEW2: "INTERVIEW2",
+        FINAL_PASS: "FINAL_PASS"
+      };
+
+      const { sort = "desc", status } = req.query;
+      const isValidStatus = !status || Object.values(Status).includes(status);
+      if (!isValidStatus) {
+        throw new ErrorHandler(STATUS_CODES.BAD_REQUEST, "잘못된 요청입니다.");
+      }
+      const orderBy = sort.toLowerCase() === "asc" ? "asc" : "desc";
+
+      const resumes = await getAllResumesForRECRUITER(orderBy, status);
+      res.status(STATUS_CODES.OK).json({
+        statusCode: STATUS_CODES.OK,
+        data: resumes
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 //유저 아이디로 Resume 가져와 버리기
-export const getResume = asyncErrorHandler(async (req, res, next) => {
-  try {
-    const userId = req.user.user_id;
-    const { resumeId } = req.params;
-    const resume = await getResumeByUserId(userId, resumeId);
-    res.status(STATUS_CODES.OK).json({
-      statusCode: STATUS_CODES.OK,
-      data: resume
-    });
-  } catch (error) {
-    next(error);
+export const getResumeForAPPLICANT = asyncErrorHandler(
+  async (req, res, next) => {
+    try {
+      const userId = req.user.user_id;
+      const { resumeId } = req.params;
+      const resume = await getResumeForAPPLICANTByResumeId(userId, resumeId);
+      res.status(STATUS_CODES.OK).json({
+        statusCode: STATUS_CODES.OK,
+        data: resume
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
+//모든 Resume 가져와 버리기 For RECRUITER
+export const getResumeForRECRUITER = asyncErrorHandler(
+  async (req, res, next) => {
+    try {
+      const { resumeId } = req.params;
+      const resume = await getResumeForRECRUITERByResumeId(resumeId);
+      res.status(STATUS_CODES.OK).json({
+        statusCode: STATUS_CODES.OK,
+        data: resume
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 //이력서 업데이트
 export const updateResume = asyncErrorHandler(async (req, res, next) => {
