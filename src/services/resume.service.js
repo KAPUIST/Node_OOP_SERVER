@@ -264,7 +264,7 @@ export const getUpdatedResumeLogForRECRUITER = async (resumeId) => {
       new_status: true,
       reason: true,
       created_at: true,
-      user: {
+      users: {
         select: {
           user_info: {
             select: {
