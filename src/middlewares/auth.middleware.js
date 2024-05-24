@@ -31,11 +31,25 @@ const getUserFromToken = async (token) => {
   if (!userId) {
     throw new ErrorHandler(401, "인증 정보와 일치하는 사용자가 없습니다.");
   }
-  const user = await prisma.user.findFirst({ where: { user_id: userId } });
+  const user = await prisma.user.findFirst({
+    where: { user_id: userId },
+    select: {
+      user_id: true,
+      user_info: {
+        select: {
+          role: true
+        }
+      }
+    }
+  });
   if (!user) {
     throw new ErrorHandler(401, "인증 정보와 일치하는 사용자가 없습니다.");
   }
 
-  const { password, ...userWithoutPassword } = user;
-  return userWithoutPassword;
+  const formattedData = {
+    user_id: user.user_id,
+    role: user.user_info.role
+  };
+
+  return formattedData;
 };

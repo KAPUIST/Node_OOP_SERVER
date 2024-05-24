@@ -57,10 +57,85 @@ export const getResumesByUserId = async (userId, orderBy) => {
 
   return formattedData;
 };
+//모든 유저의 이력서를 가져옵니다 FOR RECRUITER
+export const getAllResumesForRECRUITER = async (orderBy, status) => {
+  const statusFilter = status ? { status: status } : {};
+  const resumes = await prisma.resume.findMany({
+    where: { ...statusFilter },
+    select: {
+      resume_id: true,
+      title: true,
+      content: true,
+      status: true,
+      created_at: true,
+      updated_at: true,
+      user: {
+        select: {
+          user_info: {
+            select: {
+              username: true
+            }
+          }
+        }
+      }
+    },
+    orderBy: { created_at: orderBy }
+  });
+  if (!resumes || resumes.length === 0) {
+    return [];
+  }
+
+  const formattedData = resumes.map((resume) => ({
+    resume_id: resume.resume_id,
+    username: resume.user.user_info.username,
+    title: resume.title,
+    status: resume.status,
+    content: resume.content,
+    created_at: resume.created_at,
+    updated_at: resume.updated_at
+  }));
+
+  return formattedData;
+};
 //하나의 이력서를 가져옵니다.
-export const getResumeByUserId = async (userId, resumeId) => {
+export const getResumeForAPPLICANTByResumeId = async (userId, resumeId) => {
   const resume = await prisma.resume.findFirst({
     where: { user_id: userId, resume_id: resumeId },
+    select: {
+      resume_id: true,
+      title: true,
+      content: true,
+      status: true,
+      created_at: true,
+      updated_at: true,
+      user: {
+        select: {
+          user_info: {
+            select: {
+              username: true
+            }
+          }
+        }
+      }
+    }
+  });
+  if (!resume) {
+    throw new ErrorHandler(404, "이력서가 존재하지 않습니다.");
+  }
+  const formattedData = {
+    resume_id: resume.resume_id,
+    username: resume.user.user_info.username,
+    title: resume.title,
+    status: resume.status,
+    content: resume.content,
+    created_at: resume.created_at
+  };
+
+  return formattedData;
+};
+export const getResumeForRECRUITERByResumeId = async (resumeId) => {
+  const resume = await prisma.resume.findFirst({
+    where: { resume_id: resumeId },
     select: {
       resume_id: true,
       title: true,
