@@ -4,7 +4,7 @@ import STATUS_CODES from "../utils/statusCode.js";
 
 // 해당 유저가 존재하는 지 확인 하는 함수.
 export const getUserById = async (userId) => {
-  const user = await prisma.user.findFirst({
+  const user = await prisma.users.findFirst({
     where: { user_id: userId },
     select: {
       user_id: true,

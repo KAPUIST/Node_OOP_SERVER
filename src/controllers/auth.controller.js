@@ -1,9 +1,7 @@
 import { asyncErrorHandler } from "../middlewares/asyncError.middleware.js";
 import { loginValidation, registerValidation } from "../utils/validation/auth.validation.js";
-import { createUser, authenticateUser } from "../services/auth.service.js";
+import { createUser, authenticateUser, regenerateToken, deleteUserToken } from "../services/auth.service.js";
 import STATUS_CODES from "../utils/statusCode.js";
-import ErrorHandler from "../utils/errorHandler/errorHandler.js";
-
 //유저 생성 컨트롤러
 export const registerUser = asyncErrorHandler(async (req, res, next) => {
   try {
@@ -20,11 +18,33 @@ export const registerUser = asyncErrorHandler(async (req, res, next) => {
 //유저 로그인 컨트롤러
 export const loginUser = asyncErrorHandler(async (req, res, next) => {
   const validateData = await loginValidation.validateAsync(req.body);
-  const accessToken = await authenticateUser(validateData);
+  const [accessToken, refreshToken] = await authenticateUser(validateData);
 
-  res.cookie("authorization", `Bearer ${accessToken}`);
+  res.cookie("accessToken", `Bearer ${accessToken}`);
+  res.cookie("refreshToken", `Bearer ${refreshToken}`);
   res.status(STATUS_CODES.OK).json({
     status: STATUS_CODES.OK,
-    accessToken: accessToken
+    accessToken,
+    refreshToken
+  });
+});
+
+export const refreshAuthToken = asyncErrorHandler(async (req, res, next) => {
+  const [accessToken, refreshToken] = await regenerateToken(req.user.user_id);
+
+  res.cookie("accessToken", `Bearer ${accessToken}`);
+  res.cookie("refreshToken", `Bearer ${refreshToken}`);
+  res.status(STATUS_CODES.OK).json({
+    status: STATUS_CODES.OK,
+    accessToken,
+    refreshToken
+  });
+});
+
+export const logoutUser = asyncErrorHandler(async (req, res, next) => {
+  const deleted = await deleteUserToken(req.user.user_id);
+  res.status(STATUS_CODES.OK).json({
+    status: STATUS_CODES.OK,
+    user_id: deleted.user_id
   });
 });

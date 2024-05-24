@@ -12,3 +12,10 @@ export const generateAccessToken = (userId) => {
 export const verifyAccessToken = (token) => {
   return jwt.verify(token, options.accessSecretKey);
 };
+export const generateRefreshToken = (userId) => {
+  return jwt.sign({ user_id: userId }, options.refreshSecretKey, options.refreshOption);
+};
+
+export const verifyRefreshToken = (token) => {
+  return jwt.verify(token, options.refreshSecretKey);
+};
