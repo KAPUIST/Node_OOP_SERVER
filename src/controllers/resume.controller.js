@@ -1,6 +1,9 @@
 import { asyncErrorHandler } from "../middlewares/asyncError.middleware.js";
 import STATUS_CODES from "../utils/statusCode.js";
-import { resumeValidation } from "../utils/validation/resume.validation.js";
+import {
+  resumeValidation,
+  updateResumeValidation
+} from "../utils/validation/resume.validation.js";
 import {
   createUserResume,
   getResumesByUserId,
@@ -65,7 +68,8 @@ export const updateResume = asyncErrorHandler(async (req, res, next) => {
   try {
     const userId = req.user.user_id;
     const { resumeId } = req.params;
-    const updateData = req.body;
+    const updateData = await updateResumeValidation.validateAsync(req.body);
+    console.log(updateData);
     if (!userId || !resumeId || !updateData) {
       throw new ErrorHandler(400, "잘못된 요청입니다.");
     }

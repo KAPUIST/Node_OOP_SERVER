@@ -106,7 +106,7 @@ export const updateResumeByResumeId = async (userId, resumeId, updateData) => {
       "이력서가 존재하지 않습니다."
     );
   }
-
+  console.log(updateData.content !== undefined);
   const updateFields = {};
   if (updateData.title !== undefined) {
     updateFields.title = updateData.title;
