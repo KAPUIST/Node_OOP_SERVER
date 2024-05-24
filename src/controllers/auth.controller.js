@@ -1,8 +1,5 @@
 import { asyncErrorHandler } from "../middlewares/asyncError.middleware.js";
-import {
-  loginValidation,
-  registerValidation
-} from "../utils/validation/auth.validation.js";
+import { loginValidation, registerValidation } from "../utils/validation/auth.validation.js";
 import { createUser, authenticateUser } from "../services/auth.service.js";
 import STATUS_CODES from "../utils/statusCode.js";
 import ErrorHandler from "../utils/errorHandler/errorHandler.js";

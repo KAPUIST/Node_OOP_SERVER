@@ -6,11 +6,7 @@ const options = {
   refreshOption: { expiresIn: "7d" }
 };
 export const generateAccessToken = (userId) => {
-  return jwt.sign(
-    { user_id: userId },
-    options.accessSecretKey,
-    options.accessOption
-  );
+  return jwt.sign({ user_id: userId }, options.accessSecretKey, options.accessOption);
 };
 
 export const verifyAccessToken = (token) => {
