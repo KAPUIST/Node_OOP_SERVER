@@ -97,7 +97,7 @@ model resume_status_change_log{
   new_status Status @map("new_status")
   created_at DateTime @default(now()) @map("created_at")
 
-  user users @relation(fields: [changed_by],references: [user_id],onDelete: Cascade)
+  users users @relation(fields: [changed_by],references: [user_id],onDelete: Cascade)
   resume resume @relation(fields: [resume_id],references: [resume_id],onDelete: Cascade)
   @@map("resume_status_change_log")
 

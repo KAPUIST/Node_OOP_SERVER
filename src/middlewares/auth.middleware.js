@@ -38,12 +38,12 @@ export const authenticateRefreshToken = async (req, res, next) => {
 const getTokenFromHeaders = (headers) => {
   const authorization = headers["authorization"];
   if (!authorization) {
-    throw new ErrorHandler(401, "인증 정보가 없습니다.");
+    throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "인증 정보가 없습니다.");
   }
   const decodedAuthorization = decodeURIComponent(authorization);
   const [tokenType, token] = decodedAuthorization.split(" ");
   if (tokenType !== "Bearer") {
-    throw new ErrorHandler(401, "지원하지 않는 인증 방식입니다.");
+    throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "지원하지 않는 인증 방식입니다.");
   }
   return token;
 };
@@ -51,7 +51,7 @@ const getUserFromToken = async (token) => {
   const decodedToken = verifyAccessToken(token);
   const userId = decodedToken.user_id;
   if (!userId) {
-    throw new ErrorHandler(401, "인증 정보와 일치하는 사용자가 없습니다.");
+    throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "인증 정보와 일치하는 사용자가 없습니다.");
   }
 
   const user = await prisma.users.findFirst({
@@ -66,7 +66,7 @@ const getUserFromToken = async (token) => {
     }
   });
   if (!user) {
-    throw new ErrorHandler(401, "인증 정보와 일치하는 사용자가 없습니다.");
+    throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "인증 정보와 일치하는 사용자가 없습니다.");
   }
 
   const formattedData = {
@@ -80,7 +80,7 @@ const getUserFromRefreshToken = async (token) => {
   const decodedToken = verifyRefreshToken(token);
   const userId = decodedToken.user_id;
   if (!userId) {
-    throw new ErrorHandler(401, "인증 정보가 없습니다.");
+    throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "인증 정보가 없습니다.");
   }
 
   const user = await prisma.users.findFirst({
@@ -95,16 +95,16 @@ const getUserFromRefreshToken = async (token) => {
     }
   });
   if (!user) {
-    throw new ErrorHandler(401, "인증 정보와 일치하는 사용자가 없습니다.");
+    throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "인증 정보와 일치하는 사용자가 없습니다.");
   }
   if (!user.user_refresh_token) {
-    throw new ErrorHandler(401, "인증 정보가 없습니다.");
+    throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "인증 정보가 없습니다.");
   }
 
   const hashedRefreshToken = crypto.createHash("sha256").update(token).digest("hex");
 
   if (hashedRefreshToken !== user.user_refresh_token.token) {
-    throw new ErrorHandler("401", "폐기된 인증 정보입니다.");
+    throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "폐기된 인증 정보입니다.");
   }
   const formattedData = {
     user_id: user.user_id

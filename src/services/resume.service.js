@@ -227,7 +227,7 @@ export const deleteResumeByResumeId = async (userId, resumeId) => {
 export const updateResumeStatusForRECRUITER = async (userId, resumeId, updateData) => {
   const resume = await prisma.resume.findFirst({ where: { resume_id: resumeId } });
   if (!resume) {
-    throw ErrorHandler(STATUS_CODES.NOT_FOUND, "이력서가 존재하지 않습니다.");
+    throw new ErrorHandler(STATUS_CODES.NOT_FOUND, "이력서가 존재하지 않습니다.");
   }
   return await prisma.$transaction(async (tx) => {
     const updatedResume = await tx.resume.update({
@@ -283,7 +283,7 @@ export const getUpdatedResumeLogForRECRUITER = async (resumeId) => {
   const formattedData = resumeLogs.map((resume) => ({
     log_id: resume.log_id,
     resume_id: resume.resume_id,
-    changed_by: resume.user.user_info.username,
+    changed_by: resume.users.user_info.username,
     previous_status: resume.previous_status,
     new_status: resume.new_status,
     reason: resume.reason,

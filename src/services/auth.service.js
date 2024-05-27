@@ -3,6 +3,7 @@ import ErrorHandler from "../utils/errorHandler/errorHandler.js";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt/jwt.js";
+import STATUS_CODES from "../utils/statusCode.js";
 
 // 해당 유저가 존재하는 지 확인 하는 함수.
 export const checkUserExists = async (email) => {
@@ -14,7 +15,7 @@ export const checkUserExists = async (email) => {
 export const createUser = async (user) => {
   const isExitsUser = await checkUserExists(user.email);
   if (isExitsUser) {
-    throw new ErrorHandler(400, "이미 존재하는 유저입니다.");
+    throw new ErrorHandler(STATUS_CODES.BAD_REQUEST, "이미 존재하는 유저입니다.");
   }
   const hashedPassword = await bcrypt.hash(user.password, 10);
   return await prisma.$transaction(async (tx) => {
@@ -44,7 +45,7 @@ export const authenticateUser = async (user) => {
   const isExitsUser = await checkUserExists(user.email);
 
   if (!isExitsUser || !(await bcrypt.compare(user.password, isExitsUser.password))) {
-    throw new ErrorHandler(401, "인증 정보가 유효하지 않습니다.");
+    throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "인증 정보가 유효하지 않습니다.");
   }
   const accessToken = generateAccessToken(isExitsUser.user_id);
   const refreshToken = generateRefreshToken(isExitsUser.user_id);
