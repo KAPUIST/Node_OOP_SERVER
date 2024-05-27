@@ -22,6 +22,14 @@ DATABASE_URL="DATABASE_URL"
 ACCESS_TOKEN_SECRET_KEY="자연샘막국수"
 REFRESH_TOKEN_SECRET_KEY="혼맛스시"
 ```
+### 3. 토큰 사용방법
+
+로그인시에 쿠키로 AccessToken, RefreshToken 이 주어집니다.
+<img width="504" alt="스크린샷 2024-05-27 오전 10 42 32" src="https://github.com/KAPUIST/Node-Recruiter/assets/91464689/05745b39-2f6e-41be-b41c-6f086e8debb9">
+
+그렇게 전달 받은 토큰 을 헤더 Authorization 으로 넣어서 사용 가능합니다.
+<img width="601" alt="스크린샷 2024-05-27 오전 10 42 42" src="https://github.com/KAPUIST/Node-Recruiter/assets/91464689/775a6363-2b4e-4178-a8b5-76ba6b6da29d">
+
 
 ### 서버 실행
 
