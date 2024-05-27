@@ -5,6 +5,21 @@
 - [MySQL ERD](https://drawsql.app/teams/-1278/diagrams/node-recruiter)
 - [API 명세서](https://spiffy-geometry-22c.notion.site/Node-js-API-20809227e8c44840b4e1c1bee1588df6?pvs=4)
 
+### Recruiter 데모 계정
+```json
+{
+	"email":"recruiter@demo.com",
+	"password":"demo123"
+}
+```
+### APLICANT 데모계정
+```json
+{
+	"email":"APPLICATN@demo.com",
+	"password":"demo123"
+}
+```
+
 ## 🚀 서버 실행 방법
 
 ### 1. 설치 절차
