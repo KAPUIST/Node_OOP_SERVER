@@ -10,7 +10,8 @@ export const authenticateUser = async (req, res, next) => {
     req.user = await getUserFromToken(token);
     next();
   } catch (error) {
-    res.clearCookie("authorization");
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
     next(error);
   }
 };
@@ -31,7 +32,8 @@ export const authenticateRefreshToken = async (req, res, next) => {
     req.user = await getUserFromRefreshToken(token);
     next();
   } catch (error) {
-    res.clearCookie("authorization");
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
     next(error);
   }
 };

@@ -52,6 +52,8 @@ export const refreshAuthToken = asyncErrorHandler(async (req, res, next) => {
 export const logoutUser = asyncErrorHandler(async (req, res, next) => {
   try {
     const deleted = await deleteUserToken(req.user.user_id);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
     res.status(STATUS_CODES.OK).json({
       status: STATUS_CODES.OK,
       user_id: deleted.user_id
