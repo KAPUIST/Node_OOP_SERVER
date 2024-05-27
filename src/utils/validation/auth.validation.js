@@ -4,7 +4,7 @@ export const registerValidation = Joi.object({
     "string.base": `문자열로 입력해주셔야 합니다.`,
     "string.empty": `username 은 3 글자이상 작성해주셔야 합니다.`,
     "string.min": `username 은 3 글자이상 작성해주셔야 합니다.`,
-    "string.max": `username 은 20 글자이상 작성 할수 없습니다.`,
+    "string.max": `username 은 10 글자이상 작성 할수 없습니다.`,
     "any.required": `username 을 입력해 주세요.`
   }),
   email: Joi.string().email().min(3).max(50).required().messages({
