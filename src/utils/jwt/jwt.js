@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 const options = {
   accessSecretKey: process.env.ACCESS_TOKEN_SECRET_KEY,
   accessOption: { expiresIn: "12h" },
