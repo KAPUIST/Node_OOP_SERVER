@@ -22,6 +22,9 @@ await connectDatabase();
 //라우터
 app.use("/api", [authRouter, userRouter, resumeRouter]);
 
+app.use("/api/health", (req, res, next) => {
+  res.status(STATUS_CODES.OK).send("ping");
+});
 app.use((req, res, next) => {
   res.status(STATUS_CODES.NOT_FOUND).send("해당페이지를 찾을 수 없습니다.");
 });
