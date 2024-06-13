@@ -1,18 +1,23 @@
-import { asyncErrorHandler } from "../middlewares/asyncError.middleware.js";
 import STATUS_CODES from "../utils/statusCode.js";
+import ErrorHandler from "../utils/errorHandler/errorHandler.js";
 
-import { getUserById } from "../services/user.service.js";
-
-//유저 생성 컨트롤러
-export const getUser = asyncErrorHandler(async (req, res, next) => {
-  try {
-    const user = await getUserById(req.user.user_id);
-
-    res.status(STATUS_CODES.OK).json({
-      statusCode: STATUS_CODES.OK,
-      data: user
-    });
-  } catch (error) {
-    next(error);
+export default class UserController {
+  constructor(authService) {
+    this.authService = authService;
   }
-});
+
+  findUserById = async (req, res, next) => {
+    try {
+      const user = await this.authService.findUserInfoById(req.user.user_id);
+      if (!user) {
+        throw new ErrorHandler(STATUS_CODES.NOT_FOUND, "유저를 찾을수 없습니다.");
+      }
+
+      res.status(STATUS_CODES.OK).json({
+        data: user
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+}

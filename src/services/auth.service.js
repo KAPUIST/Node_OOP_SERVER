@@ -12,6 +12,11 @@ export default class AuthService {
     const user = await this.usersRepository.findUserById(userId);
     return user;
   };
+  findUserInfoById = async (userId) => {
+    const user = await this.usersRepository.findUserInfoById(userId);
+    return user;
+  };
+
   findUserAndTokenById = async (userId) => {
     const user = await this.usersRepository.findUserAndTokenById(userId);
     return user;

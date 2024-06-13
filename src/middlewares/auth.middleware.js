@@ -25,7 +25,7 @@ export default class AuthMiddleware {
       throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "인증 정보와 일치하는 사용자가 없습니다.");
     }
 
-    const user = await this.authService.findUserById(userId);
+    const user = await this.authService.findUserInfoById(userId);
     if (!user) {
       throw new ErrorHandler(STATUS_CODES.UNAUTHORIZED, "인증 정보와 일치하는 사용자가 없습니다.");
     }

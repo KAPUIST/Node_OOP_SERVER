@@ -11,6 +11,26 @@ export default class UsersRepository {
     console.log(user);
     return user;
   };
+  findUserInfoById = async (userId) => {
+    const user = await this.prisma.users.findUnique({
+      where: { user_id: userId },
+      select: {
+        user_id: true,
+        email: true,
+        created_at: true,
+        updated_at: true,
+        user_info: {
+          select: {
+            username: true,
+            gender: true,
+            age: true,
+            role: true
+          }
+        }
+      }
+    });
+    return user;
+  };
   findUserAndTokenById = async (userId) => {
     const user = await this.prisma.users.findUnique({
       where: { user_id: userId },

@@ -1,5 +1,5 @@
 import Joi from "joi";
-
+import { RESUME_STATUS } from "../../constants/env.constant.js";
 export const resumeValidation = Joi.object({
   title: Joi.string().min(3).max(50).required().messages({
     "string.base": `제목은 문자열로 입력해야 합니다.`,
@@ -16,6 +16,14 @@ export const resumeValidation = Joi.object({
     "any.required": `자기소개 정보는 필수입니다.`
   })
 });
+export const resumeValidator = async (req, res, next) => {
+  try {
+    await resumeValidation.validateAsync(req.body);
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 export const updateResumeValidation = Joi.object({
   title: Joi.string().min(3).max(50).messages({
     "string.base": `제목은 문자열로 입력해야 합니다.`,
@@ -34,18 +42,18 @@ export const updateResumeValidation = Joi.object({
   .messages({
     "object.missing": `수정 할 정보를 입력해 주세요.`
   });
-
-const Status = {
-  APPLY: "APPLY",
-  DROP: "DROP",
-  PASS: "PASS",
-  INTERVIEW1: "INTERVIEW1",
-  INTERVIEW2: "INTERVIEW2",
-  FINAL_PASS: "FINAL_PASS"
+export const updateResumeValidator = async (req, res, next) => {
+  try {
+    await updateResumeValidation.validateAsync(req.body);
+    next();
+  } catch (error) {
+    next(error);
+  }
 };
+
 export const updateResumeStatusValidation = Joi.object({
   status: Joi.string()
-    .valid(...Object.values(Status))
+    .valid(...Object.values(RESUME_STATUS))
     .required()
     .messages({
       "any.only": `유효하지 않은 지원 상태입니다.`,
@@ -61,3 +69,12 @@ export const updateResumeStatusValidation = Joi.object({
     "any.required": `지원 상태 변경 사유를 입력해 주세요.`
   })
 });
+
+export const updateResumeStatusValidator = async (req, res, next) => {
+  try {
+    await updateResumeStatusValidation.validateAsync(req.body);
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
