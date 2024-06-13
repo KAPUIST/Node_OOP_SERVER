@@ -4,13 +4,13 @@ import cookieParser from "cookie-parser";
 import STATUS_CODES from "./utils/statusCode.js";
 import { CustomErrorHandler } from "./middlewares/error.middleware.js";
 import { connectDatabase } from "./utils/prisma/prisma.util.js";
-import authRouter from "./routes/auth.route.js";
-import userRouter from "./routes/user.route.js";
-import resumeRouter from "./routes/resume.route.js";
+import router from "./routes/index.js";
+
+import { SERVER_PORT } from "./constants/env.constant.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.SERVER_PORT || 3000;
+const PORT = SERVER_PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -20,7 +20,7 @@ app.use(cookieParser());
 await connectDatabase();
 
 //라우터
-app.use("/api", [authRouter, userRouter, resumeRouter]);
+app.use("/api", router);
 
 app.use("/api/health", (req, res, next) => {
   res.status(STATUS_CODES.OK).send("ping");

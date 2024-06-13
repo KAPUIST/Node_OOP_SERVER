@@ -1,5 +1,5 @@
 import Joi from "joi";
-export const registerValidation = Joi.object({
+const registerValidation = Joi.object({
   username: Joi.string().min(3).max(10).required().messages({
     "string.base": `문자열로 입력해주셔야 합니다.`,
     "string.empty": `username 은 3 글자이상 작성해주셔야 합니다.`,
@@ -39,8 +39,16 @@ export const registerValidation = Joi.object({
     "any.required": `성별 정보는 필수입니다.`
   })
 });
+export const registerValidator = async (req, res, next) => {
+  try {
+    await registerValidation.validateAsync(req.body);
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 
-export const loginValidation = Joi.object({
+const loginValidation = Joi.object({
   email: Joi.string().email().min(3).max(50).required().messages({
     "string.base": `이메일은 문자열로 입력해야 합니다.`,
     "string.email": `이메일 형식이 올바르지 않습니다.`,
@@ -58,3 +66,12 @@ export const loginValidation = Joi.object({
     "any.required": `password 정보는 필수입니다.`
   })
 });
+
+export const loginValidator = async (req, res, next) => {
+  try {
+    await loginValidation.validateAsync(req.body);
+    next();
+  } catch (error) {
+    next(error);
+  }
+};

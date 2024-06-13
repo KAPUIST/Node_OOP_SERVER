@@ -57,7 +57,7 @@ model user_info {
   user_id String @unique @map("user_id")
   username String @map("username")
   age Int @map("age")
-  gender String @map("String")
+  gender String @map("gender")
   role Role @map("role") @default(APPLICANT)
   
   created_at DateTime @map("created_at") @default(now())
