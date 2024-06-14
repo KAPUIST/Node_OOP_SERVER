@@ -4,7 +4,7 @@
 
 - [MySQL ERD](https://drawsql.app/teams/-1278/diagrams/node-recruiter)
 - [API 명세서](https://spiffy-geometry-22c.notion.site/Node-js-API-20809227e8c44840b4e1c1bee1588df6?pvs=4)
-- [배포주소](43.201.51.91:3000/api/health)
+- [배포주소](http://43.201.51.91:3000/api/health)
 
 ### Recruiter 데모 계정
 ```json
