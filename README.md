@@ -1,10 +1,10 @@
-# Node-Recruiter
+# Node_OOP_SERVER
 
 노드 간단 이력서 CRUD
 
 - [MySQL ERD](https://drawsql.app/teams/-1278/diagrams/node-recruiter)
 - [API 명세서](https://spiffy-geometry-22c.notion.site/Node-js-API-20809227e8c44840b4e1c1bee1588df6?pvs=4)
-- [배포주소](https://dfgdwssegf.shop/api/health)
+- [배포주소](43.201.51.91:3000/api/health)
 
 ### Recruiter 데모 계정
 ```json
@@ -71,43 +71,49 @@ http://localhost:3000/api
 
 ### 폴더 구조
 
-```markdown
-node_modules/
-prisma/
-└── schema.prisma
-src/
-├── controllers/
-│ ├── auth.controller.js
-│ ├── resume.controller.js
-│ └── user.controller.js
-├── middlewares/
-│ ├── asyncError.middleware.js
-│ ├── auth.middleware.js
-│ └── error.middleware.js
-├── routes/
-│ ├── auth.route.js
-│ ├── resume.route.js
-│ └── user.route.js
-├── services/
-│ ├── auth.service.js
-│ ├── resume.service.js
-│ └── user.service.js
-├── utils/
-│ ├── errorHandler/
-│ │ └── errorHandler.js
-└── jwt/
-└── jwt.js
-prisma/
-├── prisma.util.js
-validation/
-├── auth.validation.js
-├── resume.validation.js
-└── statusCode.js
-app.js
-.env
-.gitignore
-.prettierrc
-package.json
-README.md
-yarn.lock
+# 프로젝트 폴더 구조
+
+```plaintext
+├── node_modules/
+├── prisma/
+│   └── schema.prisma
+├── src/
+│   ├── constants/
+│   │   ├── env.constant.js
+│   │   └── jwt.constant.js
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   ├── resume.controller.js
+│   │   └── user.controller.js
+│   ├── middlewares/
+│   │   ├── asyncError.middleware.js
+│   │   ├── auth.middleware.js
+│   │   └── error.middleware.js
+│   ├── repositories/
+│   │   ├── resumes.repository.js
+│   │   └── users.repository.js
+│   ├── routes/
+│   │   ├── auth.router.js
+│   │   ├── index.js
+│   │   ├── resume.router.js
+│   │   └── user.router.js
+│   ├── services/
+│   │   ├── auth.service.js
+│   │   └── resume.service.js
+│   ├── utils/
+│   │   ├── errorHandler/
+│   │   │   └── errorHandler.js
+│   │   ├── jwt/
+│   │   │   └── jwt.js
+│   │   └── statusCode.js
+│   └── validation/
+│       ├── auth.validation.js
+│       ├── resume.validation.js
+│       └── statusCode.js
+├── .env
+├── .gitignore
+├── .prettierrc
+├── package.json
+├── README.md
+└── yarn.lock
 ```
